@@ -1,17 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  fetchRoles,
-  fetchRole,
-  createRole,
-  updateRole,
-  deleteRole,
-} from "./roleApi";
+import client from "../../../helpers/client"; // Ensure this path is correct
 
+// Fetch all roles
 export const getRoles = createAsyncThunk(
-  `roles/getRoles`,
+  "roles/getRoles",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetchRoles();
+      const response = await client.get("/roles");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -19,11 +14,12 @@ export const getRoles = createAsyncThunk(
   }
 );
 
+// Fetch a single role by ID
 export const getRole = createAsyncThunk(
-  `roles/getRole`,
+  "roles/getRole",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetchRole(id);
+      const response = await client.get(`/roles/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -31,11 +27,12 @@ export const getRole = createAsyncThunk(
   }
 );
 
+// Add a new role
 export const addRole = createAsyncThunk(
-  `roles/addRole`,
+  "roles/addRole",
   async (role, { rejectWithValue }) => {
     try {
-      const response = await createRole(role);
+      const response = await client.post("/roles", role);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -43,11 +40,12 @@ export const addRole = createAsyncThunk(
   }
 );
 
+// Edit an existing role
 export const editRole = createAsyncThunk(
-  `roles/editRole`,
+  "roles/editRole",
   async (role, { rejectWithValue }) => {
     try {
-      const response = await updateRole(role);
+      const response = await client.put(`/roles/${role.id}`, role);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -55,11 +53,12 @@ export const editRole = createAsyncThunk(
   }
 );
 
+// Remove a role by ID
 export const removeRole = createAsyncThunk(
-  `roles/removeRole`,
+  "roles/removeRole",
   async (roleId, { rejectWithValue }) => {
     try {
-      await deleteRole(roleId);
+      await client.delete(`/roles/${roleId}`);
       return roleId;
     } catch (error) {
       return rejectWithValue(error.response.data);

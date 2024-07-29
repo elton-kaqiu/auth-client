@@ -1,18 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  fetchUser,
-  fetchUsers,
-  createUser,
-  login,
-  deleteUser,
-  updatePassword,
-} from "./userApi";
+import client from "../../../helpers/client"; // Ensure this path is correct
 
+// Fetch all users
 export const getUsers = createAsyncThunk(
   "users/getUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetchUsers();
+      const response = await client.get("/users");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -20,11 +14,12 @@ export const getUsers = createAsyncThunk(
   }
 );
 
+// Fetch a single user by ID
 export const getUser = createAsyncThunk(
   "users/getUser",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await fetchUser(id);
+      const response = await client.get(`/users/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -32,23 +27,27 @@ export const getUser = createAsyncThunk(
   }
 );
 
+// Add a new user
 export const addUser = createAsyncThunk(
   "users/addUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await createUser(userData);
-      return response.data;
+      const response = await client.post("/users", userData);
+      const { token, user } = response.data;
+      localStorage.setItem("token", token);
+      return { token, user };
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
 
+// Change user password
 export const changePassword = createAsyncThunk(
   "users/changePassword",
   async ({ id, password }, { rejectWithValue }) => {
     try {
-      const response = await updatePassword(id, password);
+      const response = await client.put(`/users/${id}/password`, { password });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -56,11 +55,12 @@ export const changePassword = createAsyncThunk(
   }
 );
 
+// Remove a user by ID
 export const removeUser = createAsyncThunk(
   "users/removeUser",
   async (id, { rejectWithValue }) => {
     try {
-      await deleteUser(id);
+      await client.delete(`/users/${id}`);
       return id;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -68,11 +68,12 @@ export const removeUser = createAsyncThunk(
   }
 );
 
+// User login
 export const userLogin = createAsyncThunk(
   "users/userLogin",
   async (loginData, { rejectWithValue }) => {
     try {
-      const response = await login(loginData);
+      const response = await client.post("/users/login", loginData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

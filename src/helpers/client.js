@@ -1,10 +1,8 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const baseURL = process.env.SERVER_API;
-
 const instance = axios.create({
-  baseURL,
+  baseURL: `http://localhost:3000/api`,
   headers: {
     "Content-Type": "application/json",
   },
@@ -25,7 +23,7 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   (response) => {
-    console.log(`Response returned: ${response}`);
+    console.log(`Response returned: ${JSON.stringify(response.data)}`);
     return response;
   },
   (error) => {
