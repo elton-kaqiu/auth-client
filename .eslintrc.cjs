@@ -3,6 +3,7 @@ module.exports = {
   env: {
     browser: true,
     es2020: true,
+    node: true,
   },
   extends: [
     "eslint:recommended",
@@ -31,5 +32,8 @@ module.exports = {
         allowConstantExport: true,
       },
     ],
+  },
+  globals: {
+    process: "readonly", // Add this line to define 'process' as a global variable
   },
 };

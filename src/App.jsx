@@ -1,5 +1,6 @@
+import { Auth } from "./components/auth/Auth.jsx";
 function App() {
-  return <div>test</div>;
+  return <Auth />;
 }
 
 export default App;
