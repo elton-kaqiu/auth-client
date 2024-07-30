@@ -27,8 +27,11 @@ export const Auth = () => {
   const handleSubmitLogin = async (e) => {
     try {
       const action = dispatch(userLogin({ email, password }));
+      console.log(action);
       if (userLogin.fulfilled.match(action)) {
+        console.log(`test test`);
         const id = action.payload.user.id;
+        console.log(id);
         navigate(`user-details/${id}`);
       }
     } catch (error) {
